@@ -15,7 +15,7 @@ from distutils.core import setup, Command
 # you can also import from setuptools
 
 setuptools.setup(
-    name="literacy",
+    name="importable",
     version="0.0.1",
     author="Tony Fast",
     author_email="tony.fast@gmail.com",
