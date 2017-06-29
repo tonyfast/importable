@@ -19,7 +19,7 @@ setuptools.setup(
     version="0.0.1",
     author="Tony Fast",
     author_email="tony.fast@gmail.com",
-    description="Write markdown in Jupyter notebook code cells",
+    description="Import anything in python.",
     license="BSD-3-Clause",
     keywords="IPython Magic Jupyter",
     url="http://github.com/tonyfast/literacy",

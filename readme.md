@@ -23,10 +23,51 @@
     readme.foo, readme.__file__
 ```
 
+    Overwriting test_importable.json2
+
+
 
 
 
     (42, './readme.ipynb')
+
+
+
+## Loader
+
+
+```python
+    from importable import finder
+```
+
+
+```python
+    %%file test_importable.json2
+    ["foo", "bar"]
+```
+
+    Overwriting test_importable.json2
+
+
+
+```python
+    @finder('json2')
+    def load_json2(self, path):
+        """Import files ending in json2"""
+        return """with open('{}') as f: data = __import__('json').load(f)
+        """.strip().format(self.path)
+```
+
+
+```python
+    import test_importable
+    test_importable.data
+```
+
+
+
+
+    ['foo', 'bar']
 
 
 
@@ -37,5 +78,5 @@
 ```
 
     [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 655 bytes to readme.md
+    [NbConvertApp] Writing 686 bytes to readme.md
 

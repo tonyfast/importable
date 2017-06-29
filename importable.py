@@ -63,6 +63,8 @@ def add_finder(finder):
 
 
 def finder(ext, bases=(SourceFileLoader,), **kwargs):
+    """A decorator to create a new ext loader by defining the get_code method.
+    """
     def importer(func):
         kwargs.update(get_code=func, ext=ext)
         return add_finder(type(func.__name__, (Importable,),{
@@ -142,15 +144,9 @@ def unload_ipython_extension(ip=get_ipython()):
     sys.path_importer_cache.clear()
 
 
-# In[32]:
+# In[15]:
 
 
 if __name__ == '__main__': 
     get_ipython().system('jupyter nbconvert --to script importable.ipynb')
-
-
-# In[ ]:
-
-
-
 
