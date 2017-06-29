@@ -23,7 +23,7 @@ setuptools.setup(
     license="BSD-3-Clause",
     keywords="IPython Magic Jupyter",
     url="http://github.com/tonyfast/literacy",
-    packages=setuptools.find_packages(),
+    py_modules=['importable'],
     #     long_description=read("readme.rst"),
     classifiers=[
         "Topic :: Utilities",

@@ -1,7 +1,7 @@
 
 # importable 
 
-> __importable__ makes files importable into python.
+> __importable__ makes files importable into python.  Files on disk should be easy to access.
 
 ---
 
@@ -10,14 +10,15 @@
 
 
 ```python
-    %load_ext importable
+    foo = 42
+    if __name__ == '__main__':
+        %load_ext importable
 ```
 
-* Notebooks and markdown files are importable.
+## Import  notebooks
 
 
 ```python
-    foo = 42
     import readme
     readme.foo, readme.__file__
 ```
@@ -35,7 +36,6 @@
         !jupyter nbconvert --to markdown readme.ipynb
 ```
 
+    [NbConvertApp] Converting notebook readme.ipynb to markdown
+    [NbConvertApp] Writing 655 bytes to readme.md
 
-```python
-
-```
