@@ -21,8 +21,8 @@ setuptools.setup(
     author_email="tony.fast@gmail.com",
     description="Import anything in python.",
     license="BSD-3-Clause",
-    keywords="IPython Magic Jupyter",
-    url="http://github.com/tonyfast/literacy",
+    keywords="IPython Jupyter Imports",
+    url="http://github.com/tonyfast/importable",
     py_modules=['importable'],
     #     long_description=read("readme.rst"),
     classifiers=[
@@ -37,6 +37,6 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Topic :: Software Development :: Testing",
     ],
-    install_requires=['notebook'],
-    tests_require=[],
-)
+    install_requires=[
+        'https://github.com/tonyfast/literacy/tarball/master',
+    ], tests_require=[])

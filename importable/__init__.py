@@ -13,7 +13,6 @@ meta_paths, path_hooks = [], []
 # In[2]:
 
 
-from literacy.preprocessors import Explode, JoinSource
 from importlib.util import spec_from_loader
 from importlib.machinery import SourceFileLoader, FileFinder
 from nbconvert.exporters.base import export, get_exporter
@@ -41,13 +40,13 @@ class Importable(object):
         return None
 
 
-# In[4]:
+# In[32]:
 
 
-exporter = get_exporter('python')(config={'Exporter': {'preprocessors': [Explode(), JoinSource()]}})
+exporter = get_exporter('python')()
 
 
-# In[5]:
+# In[33]:
 
 
 def add_finder(finder):
@@ -59,7 +58,7 @@ def add_finder(finder):
     return finder
 
 
-# In[6]:
+# In[34]:
 
 
 def finder(ext, bases=(SourceFileLoader,), **kwargs):
@@ -74,66 +73,45 @@ def finder(ext, bases=(SourceFileLoader,), **kwargs):
     return importer
 
 
-# In[7]:
+# In[35]:
 
 
 def Ipynb(self, path):
     return exporter.from_filename(self.path)[0].encode('utf-8')
 
 
-# In[8]:
+# As proof-of-concept, create a finder for ipynb files.
+
+# In[36]:
 
 
-def get_stream(module, path):
-    return """with open('{}', 'r') as f:
-        data=__import__('{}').{}(f)""".format(path, *module.split('.', 1)).encode('utf-8')
+finder('ipynb')(Ipynb)
+sys.path_importer_cache.clear()
 
 
-# In[9]:
+# Then use that finder to load subsequent notebooks.
+
+# In[37]:
 
 
-def Yaml(self, path):
-    return get_stream('yaml.safe_load', self.path)
+try:
+    from .stream import Yaml, Json
+except:
+    from stream import Yaml, Json
 
 
-# In[10]:
+# * Need to make sure multiple finders are not created.
 
-
-def Json(self, path):
-    return get_stream('json.load', self.path)
-
-
-# In[11]:
-
-
-def Markdown(self, path):
-    with open(self.path, 'r') as f:    
-        code = exporter.from_notebook_node(new_notebook(cells=[new_code_cell(
-            f.read())]))[0].encode('utf-8')
-    return code
-
-
-# In[12]:
-
-
-def Pandasify(self, path):
-    return """data=__import__("pandas").read_{ext}("{name}")""".format(
-        ext=self.ext, name=self.path)
-
-
-# In[13]:
+# In[38]:
 
 
 def load_ipython_extension(ip=get_ipython()):
-    for cls, ext in [
-        (Yaml, ['yml', 'yaml']), (Ipynb, 'ipynb'),# (Markdown, 'md'),
-        (Json, 'json'),# (Pandasify, 'csv')
-    ]:
+    for cls, ext in [(Yaml, ['yml', 'yaml']), (Json, 'json'),]:
         finder(ext)(cls)
     sys.path_importer_cache.clear()
 
 
-# In[14]:
+# In[39]:
 
 
 def unload_ipython_extension(ip=get_ipython()):
@@ -144,9 +122,9 @@ def unload_ipython_extension(ip=get_ipython()):
     sys.path_importer_cache.clear()
 
 
-# In[15]:
+# In[40]:
 
 
 if __name__ == '__main__': 
-    get_ipython().system('jupyter nbconvert --to script importable.ipynb')
+    get_ipython().system('jupyter nbconvert --to script __init__.ipynb')
 
