@@ -82,11 +82,12 @@ def Ipynb(self, path):
 
 # As proof-of-concept, create a finder for ipynb files.
 
-# In[9]:
+# In[12]:
 
 
-finder('ipynb')(Ipynb)
-sys.path_importer_cache.clear()
+def load_ipython_extension(ip=None):
+    finder('ipynb')(Ipynb)
+    sys.path_importer_cache.clear()
 
 
 # Then use that finder to load subsequent notebooks.
@@ -102,7 +103,7 @@ def unload_ipython_extension(ip=get_ipython()):
     sys.path_importer_cache.clear()
 
 
-# In[1]:
+# In[11]:
 
 
 if __name__ == '__main__': 
