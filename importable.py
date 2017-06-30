@@ -40,13 +40,13 @@ class Importable(object):
         return None
 
 
-# In[32]:
+# In[4]:
 
 
 exporter = get_exporter('python')()
 
 
-# In[33]:
+# In[5]:
 
 
 def add_finder(finder):
@@ -58,7 +58,7 @@ def add_finder(finder):
     return finder
 
 
-# In[34]:
+# In[6]:
 
 
 def finder(ext, bases=(SourceFileLoader,), **kwargs):
@@ -73,7 +73,7 @@ def finder(ext, bases=(SourceFileLoader,), **kwargs):
     return importer
 
 
-# In[35]:
+# In[8]:
 
 
 def Ipynb(self, path):
@@ -82,7 +82,7 @@ def Ipynb(self, path):
 
 # As proof-of-concept, create a finder for ipynb files.
 
-# In[36]:
+# In[9]:
 
 
 finder('ipynb')(Ipynb)
@@ -91,27 +91,7 @@ sys.path_importer_cache.clear()
 
 # Then use that finder to load subsequent notebooks.
 
-# In[37]:
-
-
-try:
-    from .stream import Yaml, Json
-except:
-    from stream import Yaml, Json
-
-
-# * Need to make sure multiple finders are not created.
-
-# In[38]:
-
-
-def load_ipython_extension(ip=get_ipython()):
-    for cls, ext in [(Yaml, ['yml', 'yaml']), (Json, 'json'),]:
-        finder(ext)(cls)
-    sys.path_importer_cache.clear()
-
-
-# In[39]:
+# In[10]:
 
 
 def unload_ipython_extension(ip=get_ipython()):
@@ -122,9 +102,9 @@ def unload_ipython_extension(ip=get_ipython()):
     sys.path_importer_cache.clear()
 
 
-# In[40]:
+# In[1]:
 
 
 if __name__ == '__main__': 
-    get_ipython().system('jupyter nbconvert --to script __init__.ipynb')
+    get_ipython().system('jupyter nbconvert --to script importable.ipynb')
 

@@ -12,7 +12,7 @@
 ```python
     foo = 42
     if __name__ == '__main__':
-        %load_ext importable
+        import importable
 ```
 
 ## Import  notebooks
@@ -23,7 +23,7 @@
     readme.foo, readme.__file__
 ```
 
-    Writing test_importable.json2
+    Overwriting test_importable.json2
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-## Loader
+## Custom Finder
 
 
 ```python
@@ -71,23 +71,6 @@
 
 
 
-## Notes
-
-* This project uses notebooks as source code.  The only python file is __init__.py.  All other modules using the <code>importable.Ipynb</code> __loader__.
-
-
-```python
-    import importable
-    importable.stream.__file__
-```
-
-
-
-
-    '/Users/tonyfast/importables/importable/stream.ipynb'
-
-
-
 
 ```python
     if True and __name__ == '__main__':        
@@ -95,5 +78,5 @@
 ```
 
     [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 1152 bytes to readme.md
+    [NbConvertApp] Writing 1060 bytes to readme.md
 

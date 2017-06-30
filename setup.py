@@ -37,6 +37,4 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Topic :: Software Development :: Testing",
     ],
-    install_requires=[
-        'https://github.com/tonyfast/literacy/tarball/master',
-    ], tests_require=[])
+    install_requires=[], tests_require=[])
