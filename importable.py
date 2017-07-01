@@ -92,10 +92,10 @@ def load_ipython_extension(ip=None):
 
 # Then use that finder to load subsequent notebooks.
 
-# In[10]:
+# In[14]:
 
 
-def unload_ipython_extension(ip=get_ipython()):
+def unload_ipython_extension(ip=None):
     for _ in sys.meta_path:
         if _ in meta_paths: sys.meta_path.pop(sys.meta_path.index(_))
     for _ in sys.path_hooks:
@@ -103,9 +103,15 @@ def unload_ipython_extension(ip=get_ipython()):
     sys.path_importer_cache.clear()
 
 
-# In[11]:
+# In[ ]:
 
 
 if __name__ == '__main__': 
     get_ipython().system('jupyter nbconvert --to script importable.ipynb')
+
+
+# In[ ]:
+
+
+
 
