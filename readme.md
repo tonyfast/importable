@@ -1,39 +1,37 @@
 
 # importable 
 
-> __importable__ makes files importable into python.  Files on disk should be easy to access.
+> __importable__ imports notebooks as python.
 
----
+Load the __importable__ extension
 
-<code>pip install git+https://github.com/tonyfast/importable</code>
 
+```python
+    %reload_ext importable 
+```
 
 
 ```python
     foo = 42
-    if __name__ == '__main__':
-        import importable
-```
-
-## Import  notebooks
-
-
-```python
     import readme
-    readme.foo, readme.__file__
+    readme.foo, readme.readme, readme.__file__
 ```
 
-    Overwriting test_importable.json2
+    Overwriting test_file.json
 
 
 
 
 
-    (42, './readme.ipynb')
+    (42, <module 'readme' from './readme.ipynb'>, './readme.ipynb')
 
 
 
-## Custom Finder
+Once __importable__ is loaded any notebook can be used as source.  Literacy is a literate programming extension for the notebook [written with notebooks as source](https://github.com/tonyfast/literacy/blob/master/literacy/__init__.py#L1).
+
+__importable__ works in Python 2 and 3, reloading only works in python 3.
+
+## Advanced: Custom Finder
 
 
 ```python
@@ -42,32 +40,32 @@
 
 
 ```python
-    %%file test_importable.json2
+    %%file test_file.json
     ["foo", "bar"]
 ```
 
-    Overwriting test_importable.json2
+    Overwriting test_file.json
 
 
 
 ```python
-    @finder('json2')
-    def load_json2(self, path):
-        """Import files ending in json2"""
+    @finder('json')
+    def load_json(self, path):
+        """Import files ending in json"""
         return """with open('{}') as f: data = __import__('json').load(f)
         """.strip().format(self.path)
 ```
 
 
 ```python
-    import test_importable
-    test_importable.data
+    import test_file
+    test_file.data
 ```
 
 
 
 
-    ['foo', 'bar']
+    [u'foo', u'bar']
 
 
 
@@ -78,5 +76,14 @@
 ```
 
     [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 1060 bytes to readme.md
+    [NbConvertApp] Writing 1910 bytes to readme.md
 
+
+## References
+
+* http://brandonio21.com/2016/10/custom-fileextension-path-based-importers-in-python/
+* https://chaobin.github.io/2015/06/22/understand-import-system-of-python/
+* http://xion.org.pl/2012/05/06/hacking-python-imports/
+* https://android.googlesource.com/toolchain/benchmark/+/master/python/src/Demo/imputil/importers.py
+* https://docs.python.org/2.7/library/imputil.html
+* PEPs: [302](https://www.python.org/dev/peps/pep-0302/), [420](https://www.python.org/dev/peps/pep-0420/), [451](https://www.python.org/dev/peps/pep-0451/)

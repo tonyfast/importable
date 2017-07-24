@@ -37,4 +37,6 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Topic :: Software Development :: Testing",
     ],
-    install_requires=[], tests_require=[])
+    install_requires=[
+        'nbconvert', 'entrypoints'
+    ], tests_require=[])
