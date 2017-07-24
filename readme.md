@@ -24,7 +24,7 @@ __importable__ is an IPython magic that permits python imports from notebook sou
 
 
 
-Once __importable__ is loaded any notebook can be used as source.  Literacy is a literate programming extension for the notebook [written with notebooks as source](https://github.com/tonyfast/literacy/blob/master/literacy/__init__.py#L1).
+Once __importable__ is loaded any notebook can be used as source.  For example, [literacy](https://github.com/tonyfast/literacy) is a literate programming extension for the notebook [written with notebooks as source](https://github.com/tonyfast/literacy/blob/master/literacy/__init__.py#L1).
 
 __importable__ works in Python 2 and 3, reloading only works in python 3.
 
@@ -74,7 +74,7 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
 ```
 
     [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 2079 bytes to readme.md
+    [NbConvertApp] Writing 1982 bytes to readme.md
 
 
 ## References
