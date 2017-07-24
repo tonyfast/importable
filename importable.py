@@ -33,10 +33,7 @@ PY2 = sys.version_info.major is 2
 class Importable(Base, object):
     def find_spec(self, name, paths, target=None):
         loader =  self.find_module(name, paths, target)
-        if loader:
-            print(loader)
-            loader = spec_from_loader(name, loader)
-        return loader
+        return loader and spec_from_loader(name, loader)
     
     def find_module(self, name, paths, target=None):
         for ext in type(self.ext) is str and [self.ext] or self.ext:
