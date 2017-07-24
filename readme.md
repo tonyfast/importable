@@ -44,12 +44,9 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
 
 
 ```python
-    %%file test_file.json
-    ["foo", "bar"]
+    if __name__ == '__main__':
+        with open('test_file.json', 'w') as f: __import__('json').dump(['foo', 'bar'], f)
 ```
-
-    Overwriting test_file.json
-
 
 
 ```python
@@ -78,6 +75,10 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
     if True and __name__ == '__main__':        
         !jupyter nbconvert --to markdown readme.ipynb
 ```
+
+    [NbConvertApp] Converting notebook readme.ipynb to markdown
+    [NbConvertApp] Writing 1919 bytes to readme.md
+
 
 ## References
 
