@@ -17,9 +17,6 @@ __importable__ is an IPython magic that permits python imports from notebook sou
     readme.foo, readme.readme, readme.__file__
 ```
 
-    Overwriting test_file.json
-
-
 
 
 
@@ -77,7 +74,7 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
 ```
 
     [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 1919 bytes to readme.md
+    [NbConvertApp] Writing 2079 bytes to readme.md
 
 
 ## References
