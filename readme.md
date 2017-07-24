@@ -3,7 +3,7 @@
 
 > __importable__ imports notebooks as python.
 
-Load the __importable__ extension
+__importable__ is an IPython magic that permits python imports from notebook sources.
 
 
 ```python
@@ -30,6 +30,10 @@ Load the __importable__ extension
 Once __importable__ is loaded any notebook can be used as source.  Literacy is a literate programming extension for the notebook [written with notebooks as source](https://github.com/tonyfast/literacy/blob/master/literacy/__init__.py#L1).
 
 __importable__ works in Python 2 and 3, reloading only works in python 3.
+
+# Installation
+
+`pip install git+https://github.com/tonyfast/importable`
 
 ## Advanced: Custom Finder
 
@@ -74,10 +78,6 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
     if True and __name__ == '__main__':        
         !jupyter nbconvert --to markdown readme.ipynb
 ```
-
-    [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 1910 bytes to readme.md
-
 
 ## References
 
