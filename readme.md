@@ -63,7 +63,7 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
 
 
 
-    [u'foo', u'bar']
+    ['foo', 'bar']
 
 
 
@@ -72,10 +72,6 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
     if True and __name__ == '__main__':        
         !jupyter nbconvert --to markdown readme.ipynb
 ```
-
-    [NbConvertApp] Converting notebook readme.ipynb to markdown
-    [NbConvertApp] Writing 1982 bytes to readme.md
-
 
 ## References
 

@@ -22,6 +22,7 @@ except:
     # Python 2 imports
     from imputil import _FilesystemImporter as Base
 
+from argparse import ArgumentParser
 from nbconvert.exporters.base import export, get_exporter
 import sys, imp
 from os.path import sep, curdir, extsep, exists
@@ -30,6 +31,13 @@ PY2 = sys.version_info.major is 2
 
 
 # In[3]:
+
+
+parser = ArgumentParser()
+parser.add_argument('--ext', nargs='+')
+
+
+# In[4]:
 
 
 class Importable(Base, object):
@@ -54,7 +62,7 @@ class Importable(Base, object):
         return compile(self.func(path), self.path, 'exec')
 
 
-# In[4]:
+# In[5]:
 
 
 class Patched(Importable):
@@ -70,13 +78,13 @@ class Patched(Importable):
         return 0, super(Patched, self).get_code(self.path), dict(__file__=self.path, __importer__=self)
 
 
-# In[5]:
+# In[6]:
 
 
 exporter = get_exporter('python')()
 
 
-# In[6]:
+# In[7]:
 
 
 def add_finder(finder):
@@ -85,7 +93,7 @@ def add_finder(finder):
     return finder
 
 
-# In[7]:
+# In[8]:
 
 
 def finder(ext, bases=[], **kwargs):
@@ -96,7 +104,7 @@ def finder(ext, bases=[], **kwargs):
     return importer
 
 
-# In[12]:
+# In[9]:
 
 
 def load_ipython_extension(ip=None):
@@ -105,10 +113,11 @@ def load_ipython_extension(ip=None):
     %reload_ext importable
     """
     finder('ipynb')(Ipynb)
+    
     sys.path_importer_cache.clear()
 
 
-# In[13]:
+# In[10]:
 
 
 def Ipynb(self, path):
@@ -119,21 +128,19 @@ def Ipynb(self, path):
     return script
 
 
-# As proof-of-concept, create a finder for ipynb files.
-
-# In[10]:
+# In[11]:
 
 
-def unload_ipython_extension(ip=None):
+def unload(ext):
     for _ in sys.meta_path:
-        if _ in meta_paths: 
+        if getattr(_, 'ext', '') in ext:
             sys.meta_path.pop(sys.meta_path.index(_))
     sys.path_importer_cache.clear()
 
 
-# In[14]:
+# In[16]:
 
 
 if True and __name__ == '__main__': 
-    get_ipython().system(u'jupyter nbconvert --to script importable.ipynb')
+    get_ipython().system('jupyter nbconvert --to script importable.ipynb')
 
