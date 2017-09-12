@@ -1,9 +1,9 @@
 
 # importable 
 
-> __importable__ imports notebooks as python.
+`pip install git+`<a href="https://github.com/tonyfast/importable"><code>https://github.com/tonyfast/importable</code></a>
 
-__importable__ is an IPython magic that permits python imports from notebook sources.
+> __importable__ is an IPython magic that permits python imports from notebook sources. [See the source.](https://github.com/tonyfast/importable/blob/master/importable.ipynb)
 
 
 ```python
@@ -30,7 +30,7 @@ __importable__ works in Python 2 and 3, reloading only works in python 3.
 
 # Installation
 
-`pip install git+https://github.com/tonyfast/importable`
+`pip install git+`<a href="https://github.com/tonyfast/importable"><code>https://github.com/tonyfast/importable</code></a>
 
 ## Advanced: Custom Finder
 
