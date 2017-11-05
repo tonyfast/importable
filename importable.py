@@ -7,7 +7,7 @@
 # 
 # > __importable__ is an IPython magic that permits python imports from notebook sources [See the source.](https://github.com/tonyfast/importable/blob/master/importable.ipynb)
 
-# In[13]:
+# In[1]:
 
 
 from __future__ import print_function
@@ -15,92 +15,86 @@ __all__ = 'finder',
 meta_paths = []
 
 
-# In[14]:
+# In[2]:
 
 
-try:
-    # Python 3 imports
-    from importlib.util import spec_from_loader
-    from importlib.machinery import SourceFileLoader as Base
-except:
-    # Python 2 imports
-    from imputil import _FilesystemImporter as Base
+from types import ModuleType
 
+from importlib import *
+from importlib.util import spec_from_loader
+from importlib.machinery import SourceFileLoader as Base, ModuleSpec
 from nbconvert.exporters.base import export, get_exporter
 import sys, imp
+from pathlib import Path
 from os.path import sep, curdir, extsep, exists
-from nbconvert import get_exporter   
+from nbconvert import get_exporter, preprocessors
+from nbformat import v4
+from nbformat import *
+from importlib import reload
 PY2 = sys.version_info.major is 2
 
+from inspect import *
 
-# In[16]:
+
+# In[3]:
 
 
-class Importable(Base, object):
-    """Base class for Python 2 or Python 3 imports.  Python 2 imports are not reloadable."""
-    def find_spec(self, name, paths, target=None):
-        # () -> ModuleSpec
-        """Python 3 finder uses the result from the Python 2 finder."""
-        loader =  self.find_module(name, paths, target)
-        return loader and spec_from_loader(name, loader)
-
-    def find_module(self, name, paths, target=None):
-        # () -> Importable
-        """Python 2 finder"""
-        for ext in type(self.ext) is str and [self.ext] or self.ext:
-            for path in paths or [curdir]:
-                path = extsep.join([sep.join([path, name.split('.')[-1]]), ext])
-                if exists(path):
-                    return type(self)(name, path)
-        return None
-
-    def get_code(self, path):
-        """Python 3 get_code from that returns a code object."""
-        return compile(self.func(path), self.path, 'exec')
+exporter = get_exporter('python')()
 
 
 # In[4]:
 
 
-class Patched(Importable):
-    """A patch for python 2"""
-    def __init__(self, name=None, path=None):
-        self.name, self.path = name, path 
+class Importable(Base, object):
+    """Base class for Python 2 or Python 3 imports.  Python 2 imports are not reloadable."""
+    def find_spec(self, name, paths, target=None):
+        loader =  self.find_module(name, paths, target)
+        return loader and spec_from_loader(name, loader)
 
-    def load_module(self, name):
-        """Python 2 loader."""
-        return self.import_top(name)
+    def find_module(self, name, paths, target=None):
+        for ext in type(self.ext) is str and [self.ext] or self.ext:
+            for path in paths or [curdir]:
+                path = Path(name).with_suffix('.'+ext)
+                if path.exists(): 
+                    return type(self)(name, str(path))
+        return None
 
-    def get_code(self, parent, name, fqname):
-        """Python 2 get_code function shim."""
-        return 0, super(Patched, self).get_code(self.path), dict(__file__=self.path, __importer__=self)
-
-
-# In[6]:
-
-
-def add_finder(finder):
-    """Add a MetaFinder to the import manager."""
-    sys.meta_path.append(finder(None, None)) or meta_paths.append(sys.meta_path[-1])
-    return finder
+    def create_module(self, spec):
+        return ModuleType(self.name)
+    
+    def exec_module(self, module):
+        for cell in reads(Path(self.path).read_text(), 4).cells:
+            try:
+                code = self.func(cell)
+                exec(code, module.__dict__, module.__dict__)
+            except:
+                raise RuntimeError(code)
+        return module    
+    
+    def get_source(self, path):
+        return exporter.from_filename(path)[0]
 
 
 # > `finder` all custom extensions.
 
-# In[7]:
+# In[5]:
 
 
 def finder(ext, bases=[], **kwargs):
-    """A decorator to create a new ext loader by defining a custom func method."""            
+    def add_finder(finder):
+        global meta_paths
+        sys.meta_path.append(finder(None, None)), meta_paths.append(sys.meta_path[-1])
+        return finder
+    
     def importer(func):
         return add_finder(type(
-            func.__name__, (PY2 and Patched or Importable,), kwargs.update(func=func, ext=ext) or kwargs))
+            func.__name__, (Importable,), kwargs.update(func=func, ext=ext) or kwargs))
     return importer
 
 
 # > `load_ipython_extension` and `unload_ipython_extension` are `ipython` namespaces; they define the `%load_ext` and `%unload_ext`, respectively. 
 
-# In[17]:
+# In[6]:
 
 
 def load_ipython_extension(ip=None):
@@ -119,7 +113,7 @@ def unload_ipython_extension(ip=None):
     %load_ext importable
     """
     for _ in sys.meta_path:
-        if isinstance(_, Importable): 
+        if _ in meta_paths: 
             sys.meta_path.pop(sys.meta_path.index(_))
     sys.path_importer_cache.clear()
 
@@ -130,36 +124,22 @@ unload = unload_ipython_extension
 
 # > an `nbconvert` exporter to create python code from notebooks.
 
-# In[5]:
+# In[7]:
 
 
-exporter = get_exporter('python')()
-
-
-# In[10]:
-
-
-def Ipynb(self, path):
-    """Custom loader from Ipynb files using the nbconvert exporter.
-
-    This pattern can be reused to create other finders."""
-    script = exporter.from_filename(self.path)[0]
-    if PY2:
-        script = '\n'.join(script.splitlines()[2:])
-    return script
-
-
-# ## Create source
-
-# In[ ]:
-
-
-if True and __name__ == '__main__': 
-    get_ipython().system('jupyter nbconvert --to script importable.ipynb')
+def Ipynb(self, cell):
+    return exporter.from_notebook_node(v4.new_notebook(cells=[cell]))[0]
 
 
 # In[ ]:
 
 
+#     load_ipython_extension()
 
+
+# In[ ]:
+
+
+if __name__ == '__main__':
+    get_ipython().system('jupyter nbconvert --to python importable.ipynb')
 
